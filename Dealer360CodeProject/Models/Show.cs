@@ -30,10 +30,9 @@ namespace Dealer360CodeProject.Models
                     var result = await resp.Content.ReadAsStringAsync();
 
                     dynamic respData = JObject.Parse(result);
-                    // Console.WriteLine(respData);
                     this.Rating = respData?.rating?.average ?? 0;
 
-                    if (respData?.rating?.medium != null)
+                    if (respData?.image?.medium != null)
                     {
                         this.ImgUrl = respData?.image?.medium ?? "";
                     }
