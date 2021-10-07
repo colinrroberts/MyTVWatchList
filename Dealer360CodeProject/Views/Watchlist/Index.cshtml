@@ -1,77 +1,83 @@
 ﻿@model List<Dealer360CodeProject.Models.Show>
 
-<div style="margin-bottom: 10px"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#insertModal">Add a Show</button></div>
-<form method="post" asp-action="Add" asp-controller="Watchlist">
-    <div id="insertModal" class="modal fade" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add a New Show</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Name:</label>
-                        <input type="text" name="Name" class="form-control" />
+    <div class="container">
+        <div style="margin-bottom: 10px"><button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#insertModal">Add a Show</button></div>
+        <form method="post" asp-action="Add" asp-controller="Watchlist">
+            <div id="insertModal" class="modal fade" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add a New Show</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" name="Name" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Your Interest Level:</label>
+                                <input type="range" class="form-control-range" name="Interest" min="1" max="10"
+                                    value="5" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Your Interest Level:</label>
-                        <input type="range" class="form-control-range" name="Interest" min="1" max="10" value="5"/>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
-        </div>
-    </div>
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Genre</th>
-            <th>My Interest Level</th>
-            <th>Avg. Rating</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Show s in Model)
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Genre</th>
+                    <th>My Interest Level</th>
+                    <th>Avg. Rating</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Show s in Model)
+                {
+                <tr>
+                    <td><img src="@s.ImgUrl" /></td>
+                    <td class="align-middle">@s.Name</td>
+                    <td class="align-middle">@s.Genre</td>
+                    <td class="align-middle">@s.Interest</td>
+                    <td class="align-middle">@s.Rating</td>
+                    <td class="align-middle"><button type="button" class="btn btn-primary"
+                            onclick="OpenEditModal(@s.ID)">Update</button></td>
+                    <td class="align-middle">
+                        <form method="post" asp-action="Delete" asp-controller="Watchlist">
+                            <input type="hidden" name="id" value="@s.ID" />
+                            <button type="submit" class="btn btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        @if(Model.Count == 0)
         {
-            <tr>
-                <td><img src="@s.ImgUrl" /></td>
-                <td class="align-middle">@s.Name</td>
-                <td class="align-middle">@s.Genre</td>
-                <td class="align-middle">@s.Interest</td>
-                <td class="align-middle">@s.Rating</td>
-                <td class="align-middle"><button type="button" class="btn btn-primary" onclick="OpenEditModal(@s.ID)">Update</button></td>
-                <td class="align-middle">
-                    <form method="post" asp-action="Delete" asp-controller="Watchlist">
-                        <input type="hidden" name="id" value="@s.ID" />
-                        <button type="submit" class="btn btn-outline-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
+        <div class="align-middle text-center">You have not added any shows yet. Click "Add a Show" to add a show to your
+            watch list.</div>
         }
-    </tbody>
-</table>
-@if(Model.Count == 0)
-{
-    <div class="align-middle text-center">You have not added any shows yet. Click "Add a Show" to add a show to your watch list.</div>
-}
-<div id="update-placeholder"></div>
-
-<script>
-    function OpenEditModal(id) {
-        var data = { id: id }
-        $.ajax(
-            {
+        <div id="update-placeholder"></div>
+    </div>
+    <script>
+        function OpenEditModal(id) {
+            var data = {
+                id: id
+            }
+            $.ajax({
                 type: 'GET',
                 url: '/Watchlist/UpdatePartial',
                 data: data,
@@ -80,7 +86,6 @@
                     $('#update-placeholder').html(result);
                     $('#updateModal').modal('show');
                 }
-            }
-        )
-    }
-</script>
+            })
+        }
+    </script>

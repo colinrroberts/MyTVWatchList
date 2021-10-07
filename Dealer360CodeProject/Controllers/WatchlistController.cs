@@ -9,6 +9,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dealer360CodeProject.Controllers
 {
@@ -22,8 +23,8 @@ namespace Dealer360CodeProject.Controllers
         public async Task<IActionResult> Index()
         {
 
-            List<Show> shows = _context.Shows.OrderByDescending(s => s.Interest).ThenByDescending(s => s.Rating).ToList();
-           
+            List<Show> shows = await _context.Shows.OrderByDescending(s => s.Interest).ThenByDescending(s => s.Rating).ToListAsync();
+
             return View(shows);
         }
 

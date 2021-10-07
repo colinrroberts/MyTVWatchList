@@ -30,8 +30,18 @@ namespace Dealer360CodeProject.Models
                     var result = await resp.Content.ReadAsStringAsync();
 
                     dynamic respData = JObject.Parse(result);
-                    this.Rating = respData.rating["average"];
-                    this.ImgUrl = respData.image["medium"];
+                    // Console.WriteLine(respData);
+                    this.Rating = respData?.rating?.average ?? 0;
+
+                    if (respData?.rating?.medium != null)
+                    {
+                        this.ImgUrl = respData?.image?.medium ?? "";
+                    }
+                    else
+                    {
+                        this.ImgUrl = "https://via.placeholder.com/210";
+                    }
+
                     if (respData.genres.Count > 0)
                     {
                         this.Genre = respData.genres.First;
@@ -41,6 +51,10 @@ namespace Dealer360CodeProject.Models
                         this.Genre = respData.type;
                     }
 
+                }
+                else
+                {
+                    this.ImgUrl = "https://via.placeholder.com/210";
                 }
             }
         }
